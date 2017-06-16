@@ -3,6 +3,7 @@ import re
 import sys
 import time
 import random
+import json
 import argparse
 import screeninfo
 
@@ -55,11 +56,44 @@ smiley_width, smiley_height = happy_smiley.get_size()
 smiley_mid_pos = ((screen_width - smiley_width) // 2, (screen_height - smiley_height) // 2)
 
 
+class RecordData():
+    def __init__(self, trial_count, Fs, age, gender="male", with_feedback="with no feeback"):
+        # timepoints when the subject starts imagination
+        self.trial = []
+
+        # containts the lables of the trials:
+        # 1: left
+        # 2: right
+        # 3: both hands
+        self.Y = []
+
+        # sampling frequncy
+        self.Fs = Fs
+
+        self.gender   = gender
+        self.age      = age
+        self.add_info = "with feedback" if with_feedback else "with no feedback"
+        self.i_trial = 0
+
+    def add_trial(self, label):
+        self.trial.append(int(time.time()))
+        self.Y.append(label)
+
+    def dump(self):
+        file_name = "session_{}".format(time.strftime("%H:%M-%d-%m-%Y.json"), time.gmtime())
+
+        with open(file_name, "w") as session_file:
+            json.dump(self.__dict__, session_file)
+
+
 def play_beep():
     pygame.mixer.music.play()
 
 
-def run_trial(cue_pos_choices, with_feedback=False):
+
+
+
+def run_trial(record_data, cue_pos_choices, with_feedback=False):
     screen.fill(black)
     pygame.display.update()
     time.sleep(3)
@@ -67,8 +101,6 @@ def run_trial(cue_pos_choices, with_feedback=False):
     pygame.draw.circle(screen, green, mid_pos, radius)
     pygame.display.update()
     time.sleep(1)
-
-    play_beep()
 
     # ensure that each cue pos will be equally chosen
     cue_pos = random.choice(list(cue_pos_choices.keys()))
@@ -78,12 +110,16 @@ def run_trial(cue_pos_choices, with_feedback=False):
 
     if cue_pos == "left":
         screen.blit(red_arrow_left, red_arrow_left_pos)
+        record_data.add_trial(1)
     elif cue_pos == "right":
         screen.blit(red_arrow_right, red_arrow_right_pos)
+        record_data.add_trial(2)
     elif cue_pos == "both":
         screen.blit(red_arrow_right, red_arrow_right_pos)
         screen.blit(red_arrow_left, red_arrow_left_pos)
+        record_data.add_trial(3)
     pygame.display.update()
+    play_beep()
 
     time.sleep(6)
     play_beep()
@@ -99,17 +135,23 @@ def run_trial(cue_pos_choices, with_feedback=False):
         time.sleep(3)
 
 
-def run_session(trials=75):
-    if trials % 3:
+def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
+    if trial_count % 3:
         raise ValueError("'trials' must be devisable by 3")
 
+    record_data = RecordData(trial_count, Fs, age, gender, with_feedback)
+
+    trial_count_for_each_cue_pos = trial_count // 3
     cue_pos_choices = {
-        "left"  : trials // 3,
-        "right" : trials // 3,
-        "both"  : trials // 3,
+        "left"  : trial_count_for_each_cue_pos,
+        "right" : trial_count_for_each_cue_pos,
+        "both"  : trial_count_for_each_cue_pos
     }
-    for trial in range(0, trials):
-        run_trial(cue_pos_choices)
+
+    for trial in range(0, trial_count):
+        run_trial(record_data, cue_pos_choices)
+
+    record_data.dump()
 
 
 if __name__ == "__main__":
