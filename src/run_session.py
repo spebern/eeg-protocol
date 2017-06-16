@@ -90,9 +90,6 @@ def play_beep():
     pygame.mixer.music.play()
 
 
-
-
-
 def run_trial(record_data, cue_pos_choices, with_feedback=False):
     screen.fill(black)
     pygame.display.update()
