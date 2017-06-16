@@ -3,7 +3,18 @@ import re
 import sys
 import time
 import random
+import argparse
 import screeninfo
+
+parser = argparse.ArgumentParser(description="eeg experiment with pygame visualisation")
+parser.add_argument("-f", "--Fs"           , help="sampling frequency"      , required=True, type=int)
+parser.add_argument("-a", "--age"          , help="age of the subject"      , required=True, type=int)
+parser.add_argument("-g", "--gender"       , help="gender of the subject"   , required=True)
+parser.add_argument("-w", "--with_feedback", help="with additional feedback", type=bool)
+
+
+args = vars(parser.parse_args())
+
 
 def get_screen_width_and_height():
     monitor_info = screeninfo.get_monitors()[0]
@@ -101,5 +112,6 @@ def run_session(trials=75):
         run_trial(cue_pos_choices)
 
 
-if __name__ == '__main__':
-    run_session(3)
+if __name__ == "__main__":
+    # run_session(75, args["Fs"], args["age"], args["gender"], args["with_feedback"])
+    run_session(3, args["Fs"], args["age"], args["gender"], args["with_feedback"])
