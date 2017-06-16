@@ -3,6 +3,7 @@ import re
 import sys
 import time
 import random
+import screeninfo
 
 def get_screen_width_and_height():
     monitor_info = screeninfo.get_monitors()[0]
