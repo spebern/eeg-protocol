@@ -146,11 +146,12 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
     }
 
     for trial in range(0, trial_count):
-        run_trial(record_data, cue_pos_choices)
+        run_trial(record_data, cue_pos_choices, with_feedback=with_feedback)
 
     record_data.dump()
 
 
 if __name__ == "__main__":
     # run_session(75, args["Fs"], args["age"], args["gender"], args["with_feedback"])
-    run_session(3, args["Fs"], args["age"], args["gender"], args["with_feedback"])
+    run_session(3, args["Fs"], args["age"], \
+                gender=args["gender"], with_feedback=args["with_feedback"])
