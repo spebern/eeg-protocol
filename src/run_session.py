@@ -1,7 +1,18 @@
 import pygame
+import re
+import sys
 import time
 import random
-from Utils import get_screen_width_and_height
+
+def get_screen_width_and_height():
+    monitor_info = screeninfo.get_monitors()[0]
+    if not monitor_info:
+        sys.exit("couldn't find monitor")
+    m = re.match("monitor\((\d+)x(\d+)\+\d+\+\d+\)", str(monitor_info))
+
+    screen_width, screen_height = int(m.group(1)), int(m.group(2))
+    return screen_width, screen_height
+
 
 screen_width, screen_height = get_screen_width_and_height()
 
