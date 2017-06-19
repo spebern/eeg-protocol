@@ -76,7 +76,8 @@ class RecordData():
         # timepoints when the subject starts imagination
         self.trial = []
 
-        self.X = []
+        self.X           = []
+        self.time_stamps = []
 
         # containts the lables of the trials:
         # 1: left
@@ -107,6 +108,9 @@ class RecordData():
     def dump(self):
         file_name = "session_" + time_str() + ".mat"
         sio.savemat(file_name, dict(self))
+
+    def start_recording(self):
+        threading.Thread(target=record, args=(self.X, self.time_stamps)).start
 
 
 def play_beep():
@@ -176,10 +180,7 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
     }
 
     record_data = RecordData(trial_count, Fs, age, gender, with_feedback)
-
-    time_stamps   = []
-    record_thread = threading.Thread(target=record, args=(record_data.X, time_stamps))
-    record_thread.start()
+    record_data.start_recording()
 
     for trial in range(0, trial_count):
         run_trial(record_data, cue_pos_choices, with_feedback=with_feedback)
