@@ -1,6 +1,34 @@
+import os
+import sys
+
+if sys.platform == "windows":
+    # DIRTY workaround from stackoverflow
+    # when using scipy, a keyboard interrup will kill python
+    # so nothing after catching the keyboard interrupt will
+    # be executed
+
+    import imp
+    import ctypes
+    import thread
+    import win32api
+
+    basepath = imp.find_module('numpy')[1]
+    ctypes.CDLL(os.path.join(basepath, 'core', 'libmmd.dll'))
+    ctypes.CDLL(os.path.join(basepath, 'core', 'libifcoremd.dll'))
+
+    def handler(dwCtrlType, hook_sigint=thread.interrupt_main):
+        if dwCtrlType == 0:
+            hook_sigint()
+            return 1
+        return 0
+
+    win32api.SetConsoleCtrlHandler(handler, 1)
+
+
 import pylsl
 import scipy.io as sio
 from utils import time_str
+
 
 record_data = []
 streams     = pylsl.resolve_stream('type', 'EEG')
