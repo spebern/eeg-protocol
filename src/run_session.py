@@ -6,6 +6,7 @@ import random
 import json
 import argparse
 import screeninfo
+import pylsl
 
 parser = argparse.ArgumentParser(description="eeg experiment with pygame visualisation")
 parser.add_argument("-f", "--Fs"           , help="sampling frequency"      , required=True, type=int)
@@ -87,7 +88,7 @@ class RecordData():
         self.Y.append(label)
 
     def dump(self):
-        file_name = "session_{}".format(time.strftime("%H_%M_%d_%m_%Y.json"), time.gmtime())
+        file_name = "session_" + time_str() + ".json"
         print(file_name)
 
         with open(file_name, "w") as session_file:
