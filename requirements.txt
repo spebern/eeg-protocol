@@ -1,4 +1,0 @@
-pygame
-screeninfo
-pylsl
-scipy
