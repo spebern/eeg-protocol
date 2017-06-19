@@ -128,7 +128,7 @@ def run_trial(record_data, cue_pos_choices, with_feedback=False):
     pygame.display.update()
     play_beep()
 
-    time.sleep(6)
+    time.sleep(4)
     play_beep()
 
     screen.fill(black)
