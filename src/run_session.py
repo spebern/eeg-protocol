@@ -75,15 +75,23 @@ class RecordData():
         self.add_info = "with feedback" if with_feedback else "with no feedback"
         self.i_trial = 0
 
+    def __iter__(self):
+        yield 'trial'   , self.trial
+        yield 'Y'       , self.Y
+        yield 'Fs'      , self.Fs
+        yield 'gender'  , self.gender
+        yield 'add_info', self.add_info
+
     def add_trial(self, label):
         self.trial.append(int(time.time()))
         self.Y.append(label)
 
     def dump(self):
-        file_name = "session_{}".format(time.strftime("%H:%M-%d-%m-%Y.json"), time.gmtime())
+        file_name = "session_{}".format(time.strftime("%H_%M_%d_%m_%Y.json"), time.gmtime())
+        print(file_name)
 
         with open(file_name, "w") as session_file:
-            json.dump(self.__dict__, session_file)
+            json.dump(dict(self), session_file)
 
 
 def play_beep():
@@ -152,6 +160,5 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
 
 
 if __name__ == "__main__":
-    # run_session(75, args["Fs"], args["age"], args["gender"], args["with_feedback"])
-    run_session(3, args["Fs"], args["age"], \
+    run_session(75, args["Fs"], args["age"], \
                 gender=args["gender"], with_feedback=args["with_feedback"])
