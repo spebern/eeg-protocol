@@ -1,3 +1,4 @@
 pygame
 screeninfo
 pylsl
+scipy
