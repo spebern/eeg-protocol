@@ -10,6 +10,11 @@ import pylsl
 import os
 from utils import time_str
 
+on_windows = os.name == 'nt'
+
+if on_windows:
+    import winsound
+
 parser = argparse.ArgumentParser(description="eeg experiment with pygame visualisation")
 parser.add_argument("-f", "--Fs"           , help="sampling frequency"      , required=True, type=int)
 parser.add_argument("-a", "--age"          , help="age of the subject"      , required=True, type=int)
@@ -45,7 +50,8 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load(os.path.join(sound_dir, "beep.mp3"))
 
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
+# screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((screen_width, screen_height))
 screen.fill(black)
 
 red_arrow       = pygame.image.load(os.path.join(image_dir, "red_arrow.png"))
@@ -131,14 +137,23 @@ def run_trial(record_data, cue_pos_choices, with_feedback=False):
         screen.blit(red_arrow_left, red_arrow_left_pos)
         record_data.add_trial(3)
     pygame.display.update()
-    play_beep()
 
-    time.sleep(4)
-    play_beep()
+    if on_windows:
+        winsound.Beep(2500, 500)
+        time.sleep(3.5)
+    else:
+        play_beep()
+        time.sleep(4)
 
     screen.fill(black)
     pygame.display.update()
-    time.sleep(2)
+
+    if on_windows:
+        winsound.Beep(2500, 500)
+        time.sleep(1.5)
+    else:
+        play_beep()
+        time.sleep(2)
 
     if with_feedback:
         smiley = random.choice([happy_smiley, sad_smiley])
