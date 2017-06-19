@@ -29,9 +29,10 @@ import scipy.io as sio
 from utils import time_str
 
 
-record_data = []
-streams     = pylsl.resolve_stream('type', 'EEG')
-inlet       = pylsl.stream_inlet(streams[0])
+channel_data = []
+time_stamps  = []
+streams      = pylsl.resolve_stream('type', 'EEG')
+inlet        = pylsl.stream_inlet(streams[0])
 
 
 while True:
@@ -39,11 +40,15 @@ while True:
         sample, time_stamp = inlet.pull_sample()
         time_stamp += inlet.time_correction()
 
+        time_stamps.append(time_stamp)
+        channel_data.append(sample)
+
         # first col of one row of the record_data matrix is time_stamp,
         # the following cols are the sampled channels
-        row = [time_stamp]
-        row.extend(list(sample))
-        record_data.append(row)
     except KeyboardInterrupt:
-        sio.savemat("recording_" + time_str() + ".mat", {"data" : record_data})
+        complete_samples = min(len(time_stamps, channel_data))
+        sio.savemat("recording_" + time_str() + ".mat", {
+            "time_stamps"  : time_stamps[:complete_samples],
+            "channel_data" : channel_data[:complete_samples]
+        })
         break
