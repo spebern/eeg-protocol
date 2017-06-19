@@ -8,7 +8,8 @@ _all_ = [
 ]
 
 windows = [
-    "pypiwin32"
+    "pypiwin32",
+    "winsound"
 ]
 
 
