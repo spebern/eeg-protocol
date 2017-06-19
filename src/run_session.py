@@ -93,12 +93,13 @@ class RecordData():
         self.i_trial = 0
 
     def __iter__(self):
-        yield 'trial'   , self.trial
-        yield 'X'       , self.X
-        yield 'Y'       , self.Y
-        yield 'Fs'      , self.Fs
-        yield 'gender'  , self.gender
-        yield 'add_info', self.add_info
+        yield 'trial'      , self.trial
+        yield 'X'          , self.X
+        yield 'time_stamps', self.time_stamps
+        yield 'Y'          , self.Y
+        yield 'Fs'         , self.Fs
+        yield 'gender'     , self.gender
+        yield 'add_info'   , self.add_info
 
     def add_trial(self, label):
         self.trial.append(pylsl.local_clock())
