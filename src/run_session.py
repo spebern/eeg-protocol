@@ -3,11 +3,13 @@ import re
 import sys
 import time
 import random
-import json
 import argparse
 import screeninfo
 import pylsl
 import os
+import threading
+import scipy.io as sio
+from record import record
 from utils import time_str
 
 on_windows = os.name == 'nt'
@@ -74,6 +76,8 @@ class RecordData():
         # timepoints when the subject starts imagination
         self.trial = []
 
+        self.X = []
+
         # containts the lables of the trials:
         # 1: left
         # 2: right
@@ -90,6 +94,7 @@ class RecordData():
 
     def __iter__(self):
         yield 'trial'   , self.trial
+        yield 'X'       , self.X
         yield 'Y'       , self.Y
         yield 'Fs'      , self.Fs
         yield 'gender'  , self.gender
@@ -100,11 +105,8 @@ class RecordData():
         self.Y.append(label)
 
     def dump(self):
-        file_name = "session_" + time_str() + ".json"
-        print(file_name)
-
-        with open(file_name, "w") as session_file:
-            json.dump(dict(self), session_file)
+        file_name = "session_" + time_str() + ".mat"
+        sio.savemat(file_name, dict(self))
 
 
 def play_beep():
@@ -166,14 +168,18 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
     if trial_count % 3:
         raise ValueError("'trials' must be devisable by 3")
 
-    record_data = RecordData(trial_count, Fs, age, gender, with_feedback)
-
     trial_count_for_each_cue_pos = trial_count // 3
     cue_pos_choices = {
         "left"  : trial_count_for_each_cue_pos,
         "right" : trial_count_for_each_cue_pos,
         "both"  : trial_count_for_each_cue_pos
     }
+
+    record_data = RecordData(trial_count, Fs, age, gender, with_feedback)
+
+    time_stamps   = []
+    record_thread = threading.Thread(target=record, args=(record_data.X, time_stamps))
+    record_thread.start()
 
     for trial in range(0, trial_count):
         run_trial(record_data, cue_pos_choices, with_feedback=with_feedback)
