@@ -186,6 +186,8 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
         run_trial(record_data, cue_pos_choices, with_feedback=with_feedback)
 
     record_data.dump()
+    pygame.quit()
+    sys.exit()
 
 
 if __name__ == "__main__":
