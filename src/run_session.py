@@ -109,7 +109,7 @@ class RecordData():
         sio.savemat(file_name, dict(self))
 
     def start_recording(self):
-        threading.Thread(target=record, args=(self.X, self.time_stamps)).start
+        threading.Thread(target=record, args=(self.X, self.time_stamps)).start()
 
 
 def play_beep():
