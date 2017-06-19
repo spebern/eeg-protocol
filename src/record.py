@@ -19,7 +19,12 @@ streams = pylsl.resolve_stream('type', 'EEG')
 inlet = pylsl.stream_inlet(streams[0])
 start_time = time.time()
 
-sample = pylsl.vectorf()
 while True:
-    time_stamp = inlet.pull_sample(sample)
-    record_data.append([time_stamp, list(sample)])
+    sample, time_stamp = inlet.pull_sample()
+    time_stamp += inlet.time_correction()
+
+    # first col of one row of the record_data matrix is time_stamp,
+    # the following cols are the sampled channels
+    row = [time_stamp]
+    row.extend(list(sample))
+    record_data.append(row)
