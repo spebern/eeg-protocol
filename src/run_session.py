@@ -7,6 +7,7 @@ import json
 import argparse
 import screeninfo
 import pylsl
+from utils import time_str
 
 parser = argparse.ArgumentParser(description="eeg experiment with pygame visualisation")
 parser.add_argument("-f", "--Fs"           , help="sampling frequency"      , required=True, type=int)
@@ -84,7 +85,7 @@ class RecordData():
         yield 'add_info', self.add_info
 
     def add_trial(self, label):
-        self.trial.append(int(time.time()))
+        self.trial.append(pylsl.local_clock())
         self.Y.append(label)
 
     def dump(self):
