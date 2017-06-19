@@ -7,6 +7,7 @@ import json
 import argparse
 import screeninfo
 import pylsl
+import os
 from utils import time_str
 
 parser = argparse.ArgumentParser(description="eeg experiment with pygame visualisation")
@@ -17,6 +18,10 @@ parser.add_argument("-w", "--with_feedback", help="with additional feedback", ty
 
 
 args = vars(parser.parse_args())
+
+root_dir  = os.path.join(os.path.dirname(__file__), "..")
+image_dir = os.path.join(root_dir, "images")
+sound_dir = os.path.join(root_dir, "sounds")
 
 
 def get_screen_width_and_height():
@@ -38,12 +43,12 @@ mid_pos = (screen_width // 2, screen_height // 2)
 
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.music.load("sounds/beep.mp3")
+pygame.mixer.music.load(os.path.join(sound_dir, "beep.mp3"))
 
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
 screen.fill(black)
 
-red_arrow       = pygame.image.load("images/red_arrow.png")
+red_arrow       = pygame.image.load(os.path.join(image_dir, "red_arrow.png"))
 red_arrow_left  = pygame.transform.rotate(red_arrow, 270)
 red_arrow_right = pygame.transform.rotate(red_arrow, 90)
 
@@ -51,8 +56,8 @@ red_arrow_width, red_arrow_height = red_arrow_left.get_size()
 red_arrow_right_pos = (screen_width - red_arrow_width, (screen_height - red_arrow_height) // 2)
 red_arrow_left_pos  = (0                             , (screen_height - red_arrow_height) // 2)
 
-happy_smiley = pygame.image.load("images/happy_smiley.png")
-sad_smiley   = pygame.image.load("images/sad_smiley.png")
+happy_smiley = pygame.image.load(os.path.join(image_dir, "happy_smiley.png"))
+sad_smiley   = pygame.image.load(os.path.join(image_dir, "sad_smiley.png"))
 
 smiley_width, smiley_height = happy_smiley.get_size()
 smiley_mid_pos = ((screen_width - smiley_width) // 2, (screen_height - smiley_height) // 2)
