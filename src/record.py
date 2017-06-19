@@ -1,7 +1,6 @@
 import os
-import sys
 
-if sys.platform == "windows":
+if os.name == "nt":
     # DIRTY workaround from stackoverflow
     # when using scipy, a keyboard interrup will kill python
     # so nothing after catching the keyboard interrupt will

@@ -18,9 +18,8 @@ def install(packages):
 
 
 if __name__ == '__main__':
-
-    from sys import platform
+    import os
 
     install(_all_)
-    if platform == 'windows':
+    if os.name == 'nt':
         install(windows)
