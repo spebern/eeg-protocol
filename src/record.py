@@ -1,7 +1,8 @@
 import pylsl
 import atexit
 import time
-import pickle
+import scipy.io as sio
+from utils import time_str
 
 record_data = []
 start_time = 0
@@ -9,7 +10,7 @@ start_time = 0
 
 def exit_handler():
     if start_time != 0:
-        pickle.dump(record_data, open("record_data_{}.p".format(start_time), "wb"))
+        sio.savemat("recording_" + time_str() + ".mat", {"data" : record_data})
 
 
 atexit.register(exit_handler)
