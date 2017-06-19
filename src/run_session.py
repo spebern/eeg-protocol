@@ -52,8 +52,7 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load(os.path.join(sound_dir, "beep.mp3"))
 
-# screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
 screen.fill(black)
 
 red_arrow       = pygame.image.load(os.path.join(image_dir, "red_arrow.png"))
