@@ -143,10 +143,11 @@ def run_trial(record_data, cue_pos_choices, with_feedback=False):
         screen.blit(red_arrow_left, red_arrow_left_pos)
         record_data.add_trial(3)
     pygame.display.update()
+    time.sleep(0.5)
 
     if on_windows:
         winsound.Beep(2500, 500)
-        time.sleep(3.5)
+        time.sleep(3)
     else:
         play_beep()
         time.sleep(4)
