@@ -92,6 +92,11 @@ class RecordData():
         self.add_info = "with feedback" if with_feedback else "with no feedback"
         self.i_trial = 0
 
+        self.recording_thread = threading.Thread(
+            target=record,
+            args=(self.X, self.time_stamps)
+        )
+
     def __iter__(self):
         yield 'trial'      , self.trial
         yield 'X'          , self.X
@@ -105,12 +110,13 @@ class RecordData():
         self.trial.append(pylsl.local_clock())
         self.Y.append(label)
 
-    def dump(self):
+    def start_recording(self):
+        self.recording_thread.start()
+
+    def stop_recording_and_dump(self):
+        self.recording_thread.exit()
         file_name = "session_" + time_str() + ".mat"
         sio.savemat(file_name, dict(self))
-
-    def start_recording(self):
-        threading.Thread(target=record, args=(self.X, self.time_stamps)).start()
 
 
 def play_beep():
@@ -186,7 +192,7 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
     for trial in range(0, trial_count):
         run_trial(record_data, cue_pos_choices, with_feedback=with_feedback)
 
-    record_data.dump()
+    record_data.stop_recording_and_dump()
     pygame.quit()
     sys.exit()
 
