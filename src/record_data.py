@@ -86,6 +86,7 @@ class RecordData():
 
     def __iter__(self):
         yield 'trial'            , self.trial
+        yield 'age'              , self.age
         yield 'X'                , self.X
         yield 'time_stamps'      , self.time_stamps
         yield 'trial_time_stamps', self.trial_time_stamps
