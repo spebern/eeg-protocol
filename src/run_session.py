@@ -5,12 +5,8 @@ import time
 import random
 import argparse
 import screeninfo
-import pylsl
 import os
-import threading
-import scipy.io as sio
-from record import record
-from utils import time_str
+from record_data import RecordData
 
 on_windows = os.name == 'nt'
 
@@ -68,55 +64,6 @@ sad_smiley   = pygame.image.load(os.path.join(image_dir, "sad_smiley.png"))
 
 smiley_width, smiley_height = happy_smiley.get_size()
 smiley_mid_pos = ((screen_width - smiley_width) // 2, (screen_height - smiley_height) // 2)
-
-
-class RecordData():
-    def __init__(self, trial_count, Fs, age, gender="male", with_feedback="with no feeback"):
-        # timepoints when the subject starts imagination
-        self.trial = []
-
-        self.X           = []
-        self.time_stamps = []
-
-        # containts the lables of the trials:
-        # 1: left
-        # 2: right
-        # 3: both hands
-        self.Y = []
-
-        # sampling frequncy
-        self.Fs = Fs
-
-        self.gender   = gender
-        self.age      = age
-        self.add_info = "with feedback" if with_feedback else "with no feedback"
-        self.i_trial = 0
-
-        self.recording_thread = threading.Thread(
-            target=record,
-            args=(self.X, self.time_stamps)
-        )
-
-    def __iter__(self):
-        yield 'trial'      , self.trial
-        yield 'X'          , self.X
-        yield 'time_stamps', self.time_stamps
-        yield 'Y'          , self.Y
-        yield 'Fs'         , self.Fs
-        yield 'gender'     , self.gender
-        yield 'add_info'   , self.add_info
-
-    def add_trial(self, label):
-        self.trial.append(pylsl.local_clock())
-        self.Y.append(label)
-
-    def start_recording(self):
-        self.recording_thread.start()
-
-    def stop_recording_and_dump(self):
-        self.recording_thread.exit()
-        file_name = "session_" + time_str() + ".mat"
-        sio.savemat(file_name, dict(self))
 
 
 def play_beep():
@@ -186,10 +133,10 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
         "both"  : trial_count_for_each_cue_pos
     }
 
-    record_data = RecordData(trial_count, Fs, age, gender, with_feedback)
+    record_data = RecordData(Fs, age, gender, with_feedback)
     record_data.start_recording()
 
-    for trial in range(0, trial_count):
+    for trial in range(trial_count):
         run_trial(record_data, cue_pos_choices, with_feedback=with_feedback)
 
     record_data.stop_recording_and_dump()
