@@ -1,6 +1,7 @@
 import unittest
 import pylsl
 import time
+import os
 from record_data import RecordData
 
 
@@ -36,6 +37,7 @@ class TestRecordData(unittest.TestCase):
                 "trial_time_stamps" : [],
                 "Y"                 : [],
                 "Fs"                : 256,
+                "age"               : 22,
                 "gender"            : "male",
                 "add_info"          : "with no feedback"
             },
@@ -51,7 +53,7 @@ class TestRecordData(unittest.TestCase):
             record_data.add_trial(trial)
             time.sleep(0.5)
 
-        record_data.stop_recording_and_dump()
+        mat_file = record_data.stop_recording_and_dump()
 
         self.assertEqual(
             record_data.trial,
@@ -64,6 +66,8 @@ class TestRecordData(unittest.TestCase):
             30,
             "wrong length of recorded data"
         )
+
+        os.remove(mat_file)
 
 
 if __name__ == '__main__':

@@ -115,3 +115,5 @@ class RecordData():
     def stop_recording_and_dump(self, file_name="session_" + time_str() + ".mat"):
         self.set_trial_start_indexes()
         sio.savemat(file_name, dict(self))
+
+        return file_name
