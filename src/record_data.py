@@ -76,13 +76,13 @@ class RecordData():
         self.gender   = gender
         self.age      = age
         self.add_info = "with feedback" if with_feedback else "with no feedback"
-        self.i_trial = 0
 
-        self.recording_thread = threading.Thread(
+        recording_thread = threading.Thread(
             target=record_func,
             args=(self.X, self.time_stamps),
-            daemon=True
         )
+        recording_thread.daemon = True
+        self.recording_thread   = recording_thread
 
     def __iter__(self):
         yield 'trial'            , self.trial
