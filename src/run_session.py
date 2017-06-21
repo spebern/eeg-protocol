@@ -146,5 +146,5 @@ def run_session(trial_count, Fs, age, gender="male", with_feedback=False):
 
 
 if __name__ == "__main__":
-    run_session(75, args["Fs"], args["age"],
+    run_session(args['trials'], args["Fs"], args["age"],
                 gender=args["gender"], with_feedback=args["with_feedback"])
