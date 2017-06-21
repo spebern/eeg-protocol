@@ -14,6 +14,7 @@ if on_windows:
     import winsound
 
 parser = argparse.ArgumentParser(description="eeg experiment with pygame visualisation")
+parser.add_argument("-t", "--trials"       , help="number of trials"        , default=72   , type=int)
 parser.add_argument("-f", "--Fs"           , help="sampling frequency"      , required=True, type=int)
 parser.add_argument("-a", "--age"          , help="age of the subject"      , required=True, type=int)
 parser.add_argument("-g", "--gender"       , help="gender of the subject"   , required=True)
