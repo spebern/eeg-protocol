@@ -28,6 +28,15 @@ import threading           # NOQA
 import scipy.io as sio     # NOQA
 import pylsl               # NOQA
 from utils import time_str # NOQA
+import time                # NOQA
+
+
+class NoRecordingDataError(Exception):
+    def __init__(self):
+        self.value = "Received not data while recording"
+
+    def __str__(self):
+        return repr(self.value)
 
 
 def record(channel_data=[], time_stamps=[]):
@@ -101,6 +110,9 @@ class RecordData():
 
     def start_recording(self):
         self.recording_thread.start()
+        time.sleep(2)
+        if len(self.X) == 0:
+            raise NoRecordingDataError()
 
     def set_trial_start_indexes(self):
         i = 0

@@ -2,7 +2,7 @@ import unittest
 import pylsl
 import time
 import os
-from record_data import RecordData
+from record_data import RecordData, NoRecordingDataError
 
 
 def test_record(channel_data=[], time_stamps=[]):
@@ -13,6 +13,11 @@ def test_record(channel_data=[], time_stamps=[]):
         x += 4.0
 
         time.sleep(0.1)
+
+
+def test_record_no_data(channel_data=[], time_stamps=[]):
+    while True:
+        pass
 
 
 class TestRecordData(unittest.TestCase):
@@ -68,6 +73,17 @@ class TestRecordData(unittest.TestCase):
         )
 
         os.remove(mat_file)
+
+    def test_no_recording_data(self):
+        record_data = RecordData(256, 22, record_func=test_record_no_data)
+
+        cought_recording_exception = False
+        try:
+            record_data.start_recording()
+        except NoRecordingDataError:
+            cought_recording_exception = True
+
+        self.assertTrue(cought_recording_exception)
 
 
 if __name__ == '__main__':
