@@ -129,3 +129,7 @@ class RecordData():
         sio.savemat(file_name, dict(self))
 
         return file_name
+
+
+if __name__ == '__main__':
+    record()
