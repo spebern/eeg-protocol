@@ -62,13 +62,13 @@ class TestRecordData(unittest.TestCase):
 
         self.assertEqual(
             record_data.trial,
-            [4, 14, 24],
+            [24, 34, 44],
             "wrong trial start indexes"
         )
 
         self.assertEqual(
             len(record_data.X),
-            30,
+            50,
             "wrong length of recorded data"
         )
 
