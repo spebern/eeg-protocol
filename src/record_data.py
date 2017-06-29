@@ -24,13 +24,11 @@ if os.name == "nt":
     win32api.SetConsoleCtrlHandler(handler, 1)
 
 
-import threading                       # NOQA
-import scipy.io as sio                 # NOQA
-import pylsl                           # NOQA
-from utils import time_str             # NOQA
-import time                            # NOQA
-import matplotlib.pyplot as plt        # NOQA
-from realtime_plot import RealtimePlot # NOQA
+import threading           # NOQA
+import scipy.io as sio     # NOQA
+import pylsl               # NOQA
+from utils import time_str # NOQA
+import time                # NOQA
 
 
 class NoRecordingDataError(Exception):
@@ -39,28 +37,6 @@ class NoRecordingDataError(Exception):
 
     def __str__(self):
         return repr(self.value)
-
-
-def live_plot():
-    fig, axes = plt.subplots()
-    plot = RealtimePlot(axes)
-
-    streams = pylsl.resolve_stream('type', 'EEG')
-    inlet   = pylsl.stream_inlet(streams[0])
-
-    def get_sample():
-        sample, time_stamp = inlet.pull_sample()
-        time_stamp += inlet.time_correction()
-        return time_stamp, sample
-
-    plot.animate(fig, get_sample)
-    plt.show()
-
-    fig, axes = plt.subplots()
-    display = RealtimePlot(axes)
-    while True:
-        display.add(get_sample())
-        plt.pause(0.001)
 
 
 def record(channel_data=[], time_stamps=[]):
@@ -156,5 +132,4 @@ class RecordData():
 
 
 if __name__ == '__main__':
-    # record()
-    live_plot()
+    record()

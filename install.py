@@ -4,8 +4,7 @@ _all_ = [
     "pygame",
     "screeninfo",
     "pylsl",
-    "scipy",
-    "matplotlib"
+    "scipy"
 ]
 
 windows = [
