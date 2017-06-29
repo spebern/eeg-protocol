@@ -14,12 +14,13 @@ def default_channels():
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--channels', help="channels to plot, defaults to all", 
+parser.add_argument('-c', '--channels', help="channels to plot, defaults to all",
                     nargs='+', type=int, default=default_channels())
 
 args = vars(parser.parse_args())
 
 channels = args["channels"]
+
 
 def get_sample():
     sample, time_stamp = inlet.pull_sample()
@@ -38,12 +39,13 @@ for i in range(len(channels)):
     plots.append(win.addPlot(row=i, col=0))
     curves.append(plots[i].plot())
 
+
 def update():
     samples = get_sample()
-    
+
     for i in range(len(channels)):
-        ys[i,:] = np.hstack((ys[i,1:], samples[i]))
-        curves[i].setData(ys[i,:])
+        ys[i, :] = np.hstack((ys[i, 1:], samples[i]))
+        curves[i].setData(ys[i, :])
 
     app.processEvents()
 
