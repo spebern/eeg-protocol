@@ -33,7 +33,7 @@ import time                # NOQA
 
 class NoRecordingDataError(Exception):
     def __init__(self):
-        self.value = "Received not data while recording"
+        self.value = "Received no data while recording"
 
     def __str__(self):
         return repr(self.value)
