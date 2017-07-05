@@ -2,7 +2,7 @@ import os
 
 if os.name == "nt":
     # DIRTY workaround from stackoverflow
-    # when using scipy, a keyboard interrup will kill python
+    # when using scipy, a keyboard interrupt will kill python
     # so nothing after catching the keyboard interrupt will
     # be executed
 
