@@ -117,7 +117,10 @@ def run_trial(record_data, cue_pos_choices, with_feedback=False):
         time.sleep(2)
 
     if with_feedback:
-        smiley = random.choice([happy_smiley, sad_smiley])
+        one_or_zero = random.choice([0, 1])
+        smiley = [sad_smiley, happy_smiley][one_or_zero]
+        record_data.add_feedback(one_or_zero)
+
         screen.blit(smiley, smiley_mid_pos)
         pygame.display.update()
         time.sleep(3)

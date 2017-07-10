@@ -73,6 +73,10 @@ class RecordData():
         self.trial_time_stamps = []
         self.time_stamps       = []
 
+        # 0 negative_feedback
+        # 1 positive feedback
+        self.feedbacks = []
+
         # containts the lables of the trials:
         # 1: left
         # 2: right
@@ -103,10 +107,14 @@ class RecordData():
         yield 'Fs'               , self.Fs
         yield 'gender'           , self.gender
         yield 'add_info'         , self.add_info
+        yield 'feedbacks'        , self.feedbacks
 
     def add_trial(self, label):
         self.trial_time_stamps.append(pylsl.local_clock())
         self.Y.append(label)
+
+    def add_feedback(self, feedback):
+        self.feedbacks.append(feedback)
 
     def start_recording(self):
         self.recording_thread.start()
